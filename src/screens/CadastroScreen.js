@@ -77,11 +77,9 @@ export default function Cadastro({ navigation }) {
       <TouchableOpacity onPress={handleCadastro} style={styles.button}>
         <Text style={styles.button}>Cadastrar-se</Text>
       </TouchableOpacity>
-      <Button
-        title="Login"
-        onPress={() => navigation.navigate("Login")}
-        style={styles.button}
-      />
+      <TouchableOpacity onPress={() => navigation.navigate("Login")} style={styles.button}>
+        <Text style={styles.button}>Login</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -102,7 +100,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   button: {
-    backgroundColor: "gray",
+    backgroundColor: "black",
+    color: "white",
+    borderRadius: 5,
+    margin: 10,
   },
   title: {
     fontSize: 25,

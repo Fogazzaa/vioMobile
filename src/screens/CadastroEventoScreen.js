@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import {
-  View,
+  Alert,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  Alert,
-  StyleSheet,
-  Button,
+  View,
 } from "react-native";
 import api from "../axios/axios";
 
@@ -77,11 +76,11 @@ export default function CadastroEvento({ navigation }) {
       <TouchableOpacity onPress={handleEvento} style={styles.button}>
         <Text style={styles.button}>Cadastrar</Text>
       </TouchableOpacity>
-      <Button
-        title="Home"
-        onPress={() => navigation.navigate("Home")}
-        style={styles.button}
-      />
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.button} onPress={() => navigation.navigate("Home")}>
+          Home
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -100,9 +99,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 20,
     paddingHorizontal: 10,
+    borderColor: "gray",
   },
   button: {
-    backgroundColor: "gray",
+    backgroundColor: "black",
+    color: "white",
+    borderRadius: 5,
+    margin: 10,
   },
   title: {
     fontSize: 25,

@@ -1,19 +1,32 @@
-import React, { useState } from "react";
-import {
-  View,
-  TouchableOpacity,
-  Alert,
-  StyleSheet,
-  Button
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-export default function Home({navigation}) {
-
+export default function Home({ navigation }) {
   return (
     <View style={styles.container}>
-      <Button title="Cadastro de Eventos" onPress={() => navigation.navigate("CadastroEvento")}/>
-      <Button title="Cadastro de Ingressos" onPress={() => navigation.navigate("CadastroIngresso")}/>
-      <Button title="Cadastro de Organizadores" onPress={() => navigation.navigate("CadastroOrganizador")}/>
+      <TouchableOpacity style={styles.button}>
+        <Text
+          style={styles.button}
+          onPress={() => navigation.navigate("CadastroEvento")}
+        >
+          Cadastro de Eventos
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button}>
+        <Text
+          style={styles.button}
+          onPress={() => navigation.navigate("CadastroIngresso")}
+        >
+          Cadastro de Ingresso
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button}>
+        <Text
+          style={styles.button}
+          onPress={() => navigation.navigate("CadastroOrganizador")}
+        >
+          Cadastro de Organizadores
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -34,12 +47,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   button: {
-    backgroundColor: "gray",
-    padding: 10,
+    backgroundColor: "black",
+    color: "white",
     borderRadius: 5,
-    alignItems: "center",
-    width: "100%",
-    width: 100,
+    margin: 10,
   },
   title: {
     fontSize: 25,
