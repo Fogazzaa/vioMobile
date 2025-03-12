@@ -3,26 +3,28 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 export default function Home({ navigation }) {
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button}
+      onPress={() => navigation.navigate("CadastroEvento")}>
         <Text
           style={styles.button}
-          onPress={() => navigation.navigate("CadastroEvento")}
+          
         >
           Cadastro de Eventos
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button}
+      onPress={() => navigation.navigate("CadastroIngresso")}>
         <Text
           style={styles.button}
-          onPress={() => navigation.navigate("CadastroIngresso")}
         >
           Cadastro de Ingresso
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button}
+       onPress={() => navigation.navigate("CadastroOrganizador")}>
         <Text
           style={styles.button}
-          onPress={() => navigation.navigate("CadastroOrganizador")}
+         
         >
           Cadastro de Organizadores
         </Text>
