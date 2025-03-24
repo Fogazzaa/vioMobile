@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import {
-  View,
+  Alert,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  Alert,
-  StyleSheet,
-  Button,
+  View,
 } from "react-native";
 import api from "../axios/axios";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function Login({ navigation }) {
   const [user, setUser] = useState({
     email: "",
     password: "",
+    showPassword: false,
   });
 
   async function handleLogin() {
@@ -40,14 +41,27 @@ export default function Login({ navigation }) {
         }}
         style={styles.input}
       />
-      <TextInput
-        placeholder="Senha"
-        value={user.password}
-        onChangeText={(value) => {
-          setUser({ ...user, password: value });
-        }}
-        style={styles.input}
-      />
+      <View style={styles.passwordContainer}>
+        <TextInput
+          placeholder="Senha"
+          value={user.password}
+          secureTextEntry={!user.showPassword}
+          onChangeText={(value) => {
+            setUser({ ...user, password: value });
+          }}
+          style={styles.passWordInput}
+        />
+        <TouchableOpacity
+          style={styles.passWordButton}
+          onPress={() => setUser({ ...user, showPassword: !user.showPassword })}
+        >
+          <Ionicons
+            name={user.showPassword ? "eye-off" : "eye"}
+            size={24}
+            color={"gray"}
+          />
+        </TouchableOpacity>
+      </View>
       <TouchableOpacity onPress={handleLogin} style={styles.button}>
         <Text style={styles.button}>Entrar</Text>
       </TouchableOpacity>
@@ -71,12 +85,32 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 20,
   },
+
   input: {
-    width: 200,
+    width: "50%",
     height: 40,
     borderWidth: 1,
     marginBottom: 20,
     paddingHorizontal: 10,
+  },
+  passwordContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    paddingRight: 10
+  },
+  passWordInput: {
+    width: "51%",
+    borderWidth: 1,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+    height: 40,
+    left: 110,
+  },
+  passWordButton: {
+    position: "absolute",
+    right: 120,
+    top: 10,
   },
   button: {
     backgroundColor: "black",
