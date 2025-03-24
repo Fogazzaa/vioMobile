@@ -9,13 +9,16 @@ import {
 } from "react-native";
 import api from "../axios/axios";
 import { Ionicons } from "@expo/vector-icons";
+import {useNavigation} from "@react-navigation/native"
 
-export default function Login({ navigation }) {
+export default function Login() {
   const [user, setUser] = useState({
     email: "",
     password: "",
     showPassword: false,
   });
+
+  const navigation = useNavigation();
 
   async function handleLogin() {
     await api.postLogin(user).then(
@@ -84,6 +87,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white",
     padding: 20,
+    width:"100%"
   },
 
   input: {
