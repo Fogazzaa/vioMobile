@@ -3,6 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 export default function Home({ navigation }) {
   return (
     <View style={styles.container}>
+
       <TouchableOpacity style={styles.button}
       onPress={() => navigation.navigate("CadastroEvento")}>
         <Text
@@ -12,6 +13,17 @@ export default function Home({ navigation }) {
           Cadastro de Eventos
         </Text>
       </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button}
+      onPress={() => navigation.navigate("GetEventos")}>
+        <Text
+          style={styles.button}
+          
+        >
+          Lista de Eventos
+        </Text>
+      </TouchableOpacity>
+
       <TouchableOpacity style={styles.button}
       onPress={() => navigation.navigate("CadastroIngresso")}>
         <Text
@@ -20,6 +32,7 @@ export default function Home({ navigation }) {
           Cadastro de Ingresso
         </Text>
       </TouchableOpacity>
+
       <TouchableOpacity style={styles.button}
        onPress={() => navigation.navigate("CadastroOrganizador")}>
         <Text
@@ -29,6 +42,7 @@ export default function Home({ navigation }) {
           Cadastro de Organizadores
         </Text>
       </TouchableOpacity>
+
     </View>
   );
 }

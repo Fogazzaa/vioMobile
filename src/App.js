@@ -5,6 +5,7 @@ import LoginScreen from "./screens/LoginScreen";
 import CadastroScreen from "./screens/CadastroScreen";
 import HomeScreen from "./screens/HomeScreen";
 import CadastroEventoScreen from "./screens/CadastroEventoScreen";
+import EventosScreen from "./screens/EventosScreen";
 import CadastroOrganizadorScreen from "./screens/CadastroOrganizadorScreen";
 import CadastroIngressoScreen from "./screens/CadastroIngressoScreen";
 import Layout from "./components/Layout";
@@ -17,7 +18,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="TaskList"
+        initialRouteName="Home"
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen
@@ -37,6 +38,7 @@ export default function App() {
           )}
         />
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="GetEventos" component={EventosScreen} />
         <Stack.Screen name="CadastroEvento" component={CadastroEventoScreen} />
         <Stack.Screen
           name="CadastroOrganizador"
