@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import api from "../axios/axios";
+import api from "../services/axios";
 import { Ionicons } from "@expo/vector-icons";
 import {useNavigation} from "@react-navigation/native"
 

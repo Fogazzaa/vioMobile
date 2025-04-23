@@ -48,8 +48,8 @@ export default function App() {
           name="CadastroIngresso"
           component={CadastroIngressoScreen}
         />
-        <Stack.Screen name="TaskList" component={TaskList} />
-        <Stack.Screen name="TaskDetail" component={TaskDetail} />
+        {/* <Stack.Screen name="TaskList" component={TaskList} />
+        <Stack.Screen name="TaskDetail" component={TaskDetail} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

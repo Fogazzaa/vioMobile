@@ -8,7 +8,7 @@ import {
   StyleSheet,
   Button,
 } from "react-native";
-import api from "../axios/axios";
+import api from "../services/axios";
 import {useNavigation} from "@react-navigation/native"
 
 export default function Cadastro() {

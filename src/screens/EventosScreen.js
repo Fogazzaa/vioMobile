@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "../axios/axios";
+import api from "../services/axios";
 import {
   StyleSheet,
   Text,
@@ -15,11 +15,11 @@ export default function Eventos({ navigation }) {
   const [ingressos, setIngressos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
-  const [eventoSelecionado, setEventoSelecionado] = useState(null);
+  const [eventoSelecionado, setEventoSelecionado] = useState("");
 
   useEffect(() => {
     getEventos();
-  });
+  }, []);
 
   async function getEventos() {
     try {
@@ -31,11 +31,23 @@ export default function Eventos({ navigation }) {
     }
   }
 
+  async function abrirModalComIngressos(evento) {
+    setEventoSelecionado(evento);
+    setModalVisible(true);
+
+    try {
+      const response = await api.getIngressosPorEvento(evento.id_evento);
+      setIngressos(response.data.ingressos);
+    } catch (error) {
+      console.log("Erro ao buscar ingressos", error.response);
+    }
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Eventos Disponíveis</Text>
+            <Text style={styles.title}>Eventos Disponíveis</Text>     {" "}
       {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" color="gray" />
       ) : (
         <FlatList
           data={eventos}
@@ -44,16 +56,65 @@ export default function Eventos({ navigation }) {
             <TouchableOpacity
               style={styles.eventCard}
               onPress={() => {
-                console.log("Modal aberto");
+                abrirModalComIngressos(item);
               }}
             >
-              <Text style={styles.eventName}>{item.nome}</Text>
-              <Text>{item.local}</Text>
-              <Text>{new Date (item.data_hora).toLocaleString}</Text>
+                            <Text style={styles.eventName}>{item.nome}</Text>   
+                        <Text style={styles.eventLocal}>{item.local}</Text>     
+                     {" "}
+              <Text style={styles.eventDate}>
+                {new Date(item.data_hora).toLocaleString()}
+              </Text>
+                         {" "}
             </TouchableOpacity>
           )}
         />
       )}
+           {" "}
+      <Modal
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+        animationType="slide"
+      >
+               {" "}
+        <View style={styles.modalContainer}>
+                   {" "}
+          <Text style={styles.modalTitle}>
+            Ingressos para: {eventoSelecionado.nome}
+          </Text>
+                   {" "}
+          {ingressos.length === 0 ? (
+            <Text style={styles.modalEmptyText}>
+              Nenhum ingresso encontrado
+            </Text>
+          ) : (
+            <FlatList
+              data={ingressos}
+              keyExtractor={(item) => item.id_ingresso.toString()}
+              renderItem={({ item }) => (
+                <View style={styles.ingressoItem}>
+                                   {" "}
+                  <Text style={styles.ingressoTipo}>Tipo: {item.tipo}</Text>   
+                               {" "}
+                  <Text style={styles.ingressoPreco}>Preço: {item.preco}</Text> 
+                               {" "}
+                </View>
+              )}
+            />
+          )}
+                   {" "}
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => setModalVisible(false)}
+          >
+                        <Text style={styles.closeButtonText}>Fechar</Text>     
+               {" "}
+          </TouchableOpacity>
+                 {" "}
+        </View>
+             {" "}
+      </Modal>
+         {" "}
     </View>
   );
 }
@@ -63,43 +124,66 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     paddingTop: 50,
+    backgroundColor: "white", // Fundo branco
   },
   title: {
     fontSize: 22,
     fontWeight: "bold",
     marginBottom: 20,
+    color: "black", // Texto preto
   },
   eventCard: {
     padding: 15,
-    backgroundColor: "gray",
+    backgroundColor: "lightgray", // Cartão cinza claro
     marginBottom: 10,
     borderRadius: 8,
   },
   eventName: {
     fontSize: 18,
     fontWeight: "bold",
+    color: "black", // Texto preto
+  },
+  eventLocal: {
+    color: "gray", // Texto cinza
+  },
+  eventDate: {
+    color: "gray", // Texto cinza
   },
   modalContainer: {
     flex: 1,
     padding: 20,
     paddingTop: 50,
+    backgroundColor: "gray", // Fundo do modal cinza
   },
   modalTitle: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 15,
+    color: "black", // Texto preto
+  },
+  modalEmptyText: {
+    color: "black", // Texto preto
   },
   ingressoItem: {
     padding: 10,
-    backgroundColor: "#e6e6e6",
+    backgroundColor: "white", // Item do ingresso branco
     marginBottom: 10,
     borderRadius: 6,
   },
+  ingressoTipo: {
+    color: "black", // Texto preto
+  },
+  ingressoPreco: {
+    color: "gray", // Texto cinza
+  },
   closeButton: {
     marginTop: 20,
-    backgroundColor: "blue",
+    backgroundColor: "black", // Botão preto
     padding: 10,
     alignItems: "center",
     borderRadius: 6,
+  },
+  closeButtonText: {
+    color: "white", // Texto branco
   },
 });
