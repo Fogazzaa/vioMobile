@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import api from "../services/axios";
 import {
+  Alert,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
   FlatList,
@@ -16,6 +18,8 @@ export default function Eventos({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [eventoSelecionado, setEventoSelecionado] = useState("");
+  const [mostrarForm, setMostrarForm] = useState(false);
+  const [novoIngresso, setNovoIngresso] = useState({ tipo: "", preco: "" });
 
   useEffect(() => {
     getEventos();
@@ -43,9 +47,33 @@ export default function Eventos({ navigation }) {
     }
   }
 
+  async function criarIngresso() {
+    try {
+      const response = await api.createIngresso({
+        tipo: novoIngresso.tipo,
+        preco: novoIngresso.preco,
+        fk_id_evento: eventoSelecionado.id_evento,
+      });
+      Alert.alert(response.data.message);
+
+      // Atualiza lista
+      const responseAtualizado = await api.getIngressosPorEvento(
+        eventoSelecionado.id_evento
+      );
+      setIngressos(responseAtualizado.data.ingressos);
+
+      // Limpa e esconde o formulário
+      setNovoIngresso({ tipo: "", preco: "" });
+      setMostrarForm(false);
+    } catch (error) {
+      console.log("Erro ao criar ingresso", error.response.data.error);
+      Alert.alert(error.response.data.error);
+    }
+  }
+
   return (
     <View style={styles.container}>
-            <Text style={styles.title}>Eventos Disponíveis</Text>     {" "}
+      <Text style={styles.title}>Eventos Disponíveis</Text>{" "}
       {loading ? (
         <ActivityIndicator size="large" color="gray" />
       ) : (
@@ -59,30 +87,24 @@ export default function Eventos({ navigation }) {
                 abrirModalComIngressos(item);
               }}
             >
-                            <Text style={styles.eventName}>{item.nome}</Text>   
-                        <Text style={styles.eventLocal}>{item.local}</Text>     
-                     {" "}
+              <Text style={styles.eventName}>{item.nome}</Text>
+              <Text style={styles.eventLocal}>{item.local}</Text>
               <Text style={styles.eventDate}>
                 {new Date(item.data_hora).toLocaleString()}
               </Text>
-                         {" "}
             </TouchableOpacity>
           )}
         />
       )}
-           {" "}
       <Modal
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
         animationType="slide"
       >
-               {" "}
         <View style={styles.modalContainer}>
-                   {" "}
           <Text style={styles.modalTitle}>
             Ingressos para: {eventoSelecionado.nome}
           </Text>
-                   {" "}
           {ingressos.length === 0 ? (
             <Text style={styles.modalEmptyText}>
               Nenhum ingresso encontrado
@@ -93,28 +115,58 @@ export default function Eventos({ navigation }) {
               keyExtractor={(item) => item.id_ingresso.toString()}
               renderItem={({ item }) => (
                 <View style={styles.ingressoItem}>
-                                   {" "}
-                  <Text style={styles.ingressoTipo}>Tipo: {item.tipo}</Text>   
-                               {" "}
-                  <Text style={styles.ingressoPreco}>Preço: {item.preco}</Text> 
-                               {" "}
+                  <Text style={styles.ingressoTipo}>Tipo: {item.tipo}</Text>
+                  <Text style={styles.ingressoPreco}>Preço: {item.preco}</Text>
                 </View>
               )}
             />
           )}
-                   {" "}
           <TouchableOpacity
             style={styles.closeButton}
             onPress={() => setModalVisible(false)}
           >
-                        <Text style={styles.closeButtonText}>Fechar</Text>     
-               {" "}
+            <Text style={styles.closeButtonText}>Fechar</Text>
           </TouchableOpacity>
-                 {" "}
+          <TouchableOpacity
+            style={[styles.closeButton, { backgroundColor: "black" }]}
+            onPress={() => setMostrarForm(!mostrarForm)}
+          >
+            <Text style={{ color: "white" }}>
+              {mostrarForm ? "Cancelar" : "Criar novo ingresso"}
+            </Text>
+          </TouchableOpacity>
+
+          {mostrarForm && (
+            <View style={{ marginTop: 20 }}>
+              <Text>Tipo do ingresso:</Text>
+              <TextInput
+                value={novoIngresso.tipo}
+                onChangeText={(text) =>
+                  setNovoIngresso({ ...novoIngresso, tipo: text })
+                }
+                style={styles.input}
+                placeholder="Ex: VIP, Meia, Inteira..."
+              />
+              <Text>Preço:</Text>
+              <TextInput
+                value={novoIngresso.preco}
+                onChangeText={(text) =>
+                  setNovoIngresso({ ...novoIngresso, preco: text })
+                }
+                keyboardType="numeric"
+                style={styles.input}
+                placeholder="Ex: 40.00"
+              />
+              <TouchableOpacity
+                style={[styles.closeButton, { backgroundColor: "black" }]}
+                onPress={criarIngresso}
+              >
+                <Text style={{ color: "white" }}>Salvar ingresso</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
-             {" "}
       </Modal>
-         {" "}
     </View>
   );
 }
@@ -185,5 +237,13 @@ const styles = StyleSheet.create({
   },
   closeButtonText: {
     color: "white", // Texto branco
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "gray",
+    backgroundColor: "white",
+    borderRadius: 6,
+    padding: 10,
+    marginBottom: 10,
   },
 });
