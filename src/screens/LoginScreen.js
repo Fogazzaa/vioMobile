@@ -9,7 +9,8 @@ import {
 } from "react-native";
 import api from "../services/axios";
 import { Ionicons } from "@expo/vector-icons";
-import {useNavigation} from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
 
 export default function Login() {
   const [user, setUser] = useState({
@@ -20,11 +21,17 @@ export default function Login() {
 
   const navigation = useNavigation();
 
+  async function saveToken(token) {
+    await SecureStore.setItemAsync("token", token);
+    console.log("token: ", token)
+  }
+
   async function handleLogin() {
     await api.postLogin(user).then(
       (response) => {
         console.log(response.data.message);
         Alert.alert("OK", response.data.message);
+        saveToken(response.data.token);
         navigation.navigate("Home");
       },
       (error) => {
@@ -87,7 +94,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "white",
     padding: 20,
-    width:"100%"
+    width: "100%",
   },
 
   input: {
@@ -101,8 +108,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     width: "100%",
-    marginRight:20,
-    paddingRight: 10
+    marginRight: 20,
+    paddingRight: 10,
   },
   passWordInput: {
     width: "51%",

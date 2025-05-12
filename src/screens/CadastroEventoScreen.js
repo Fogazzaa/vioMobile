@@ -15,7 +15,7 @@ export default function CadastroEvento({ navigation }) {
     descricao: "",
     data_hora: "",
     local: "",
-    fk_id_evento: "",
+    fk_id_organizador: "",
   });
 
   async function handleEvento() {
