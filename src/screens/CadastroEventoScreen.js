@@ -8,6 +8,7 @@ import {
   View,
 } from "react-native";
 import api from "../services/axios";
+import CustomDateTimePicker from "../components/DateTimePicker";
 
 export default function CadastroEvento({ navigation }) {
   const [evento, setEvento] = useState({
@@ -49,13 +50,15 @@ export default function CadastroEvento({ navigation }) {
         }}
         style={styles.input}
       />
-      <TextInput
-        placeholder="Data e Hora"
-        value={evento.data_hora}
-        onChangeText={(value) => {
-          setEvento({ ...evento, data_hora: value });
-        }}
-        style={styles.input}
+      <CustomDateTimePicker
+        type={"datetime"}
+        buttonTitle={
+          evento.data_hora === ""
+            ? "Data do Evento"
+            : evento.data_hora.toLocaleString()
+        }
+        setValue={setEvento}
+        dateKey={"data_hora"}
       />
       <TextInput
         placeholder="Local"

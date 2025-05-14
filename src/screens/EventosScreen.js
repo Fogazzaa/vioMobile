@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import api from "../services/axios";
 import {
   Alert,
@@ -12,7 +13,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 
-export default function Eventos({ navigation }) {
+export default function Eventos() {
   const [eventos, setEventos] = useState([]);
   const [ingressos, setIngressos] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,9 +21,10 @@ export default function Eventos({ navigation }) {
   const [eventoSelecionado, setEventoSelecionado] = useState("");
   const [mostrarForm, setMostrarForm] = useState(false);
   const [novoIngresso, setNovoIngresso] = useState({ tipo: "", preco: "" });
+  const navigation = useNavigation();
 
   useEffect(() => {
-    getEventos();
+    getEventos();  
   }, []);
 
   async function getEventos() {
@@ -73,6 +75,7 @@ export default function Eventos({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity onPress={() => navigation.navigate("CadastroEvento")}><Text>Criar Eventos</Text></TouchableOpacity>
       <Text style={styles.title}>Eventos Disponíveis</Text>{" "}
       {loading ? (
         <ActivityIndicator size="large" color="gray" />
